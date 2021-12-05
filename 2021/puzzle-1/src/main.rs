@@ -25,7 +25,7 @@ fn main() {
             Err(err) => panic!("Error parsing: {}", err)
         };
     }
-    println!("Importing done!\n\nGetting output from file...");
+    println!("Importing done!\n\nGetting part 1 output from file...");
 
     let mut total_increasing = -1;
 
@@ -37,5 +37,21 @@ fn main() {
         }
         last_val = *num;
     }
-    println!("Output finished!\n\nOutput: {}", total_increasing);
+
+    println!("Output part 1 finished!\n\nOutput p1: {}\n\n", total_increasing);
+
+    println!("Getting part 2 output from file...");
+
+    total_increasing = -1;
+
+    last_val = std::i32::MIN;
+    for num in 0..numbers.len() - 2 {
+        total_increasing += match numbers[num] + numbers[num+1] + numbers[num+2] {
+            val if val > last_val => 1,
+            _ => 0
+        };
+        last_val = numbers[num] + numbers[num+1] + numbers[num + 2];
+    }
+
+    println!("Output part 2 finished!\n\nOutput p2: {}\n\n", total_increasing);
 }
