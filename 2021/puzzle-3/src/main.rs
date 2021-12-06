@@ -11,7 +11,7 @@ fn main() -> Result<(), std::io::Error> {
     let mut lines: Vec<String> = Vec::new();
     load_file_into_vec("./src/input.txt", &mut lines)?;
 
-    println!("Converting data...");
+    println!("Converting data for part 1...");
     let mut gamma_rate = String::new();
     let mut epsilon_rate = String::new();
 
@@ -45,7 +45,85 @@ fn main() -> Result<(), std::io::Error> {
         Err(_) => panic!("Parse error: {}", epsilon_rate)
     };
     println!("Conversion complete!\n");
-    println!("Output is {}",epsilon_rate * gamma_rate);
+    println!("Output for part 1 is {}\n",epsilon_rate * gamma_rate);
+    drop(epsilon_rate);
+    drop(gamma_rate);
+
+    let mut lines_left: Vec<String> = lines.to_vec();
+    
+    let mut cur_ind = 0;
+    let mut remove_char;
+
+    println!("Converting for Oxygen...");
+    while lines_left.len() > 1 {
+        ones = 0;
+        zeroes = 0;
+
+        for lin in 0..lines_left.len() {
+            match lines_left[lin].as_bytes()[cur_ind] as char {
+                '1' => ones += 1,
+                '0' => zeroes += 1,
+                _ => ()
+            };
+        }
+
+        remove_char = match ones >= zeroes {
+            true => "0".to_string(),
+            false => "1".to_string()
+        };
+
+        for x in (0..lines_left.len()).rev() {
+            if lines_left[x].as_bytes()[cur_ind] == remove_char.as_bytes()[0] {
+                lines_left.remove(x);
+            }
+        }
+        cur_ind += 1;
+    }
+
+    let oxygen_gen_rating = lines_left[0].to_string();
+
+   // lines_left.remove(0);
+    println!("Converting done!\n\nConverting for Carbon Dioxide...");
+    cur_ind = 0;
+    lines_left = lines.to_vec();
+    while lines_left.len() > 1 {
+        ones = 0;
+        zeroes = 0;
+
+        for lin in 0..lines_left.len() {
+            match lines_left[lin].as_bytes()[cur_ind] as char {
+                '1' => ones += 1,
+                '0' => zeroes += 1,
+                _ => ()
+            };
+        }
+
+        remove_char = match ones >= zeroes {
+            true => "1".to_string(),
+            false => "0".to_string()
+        };
+
+        for x in (0..lines_left.len()).rev() {
+            if lines_left[x].as_bytes()[cur_ind] == remove_char.as_bytes()[0] {
+                lines_left.remove(x);
+            }
+        }
+        cur_ind += 1;
+    }
+    let co2_scrub_rating = lines_left[0].to_string();
+    println!("Conversion done!");
+
+    let oxygen_gen_rating = match i32::from_str_radix(&oxygen_gen_rating, 2) {
+        Ok(val) => val,
+        Err(_) => panic!("Parse error: {}", oxygen_gen_rating)
+    };
+    let co2_scrub_rating = match i32::from_str_radix(&co2_scrub_rating, 2) {
+        Ok(val) => val,
+        Err(_) => panic!("Parse error: {}", co2_scrub_rating)
+    };
+
+    println!("\nOutput for part 2 is {} * {} = {}\n",oxygen_gen_rating, co2_scrub_rating, oxygen_gen_rating * co2_scrub_rating);
+
     Ok(())
 }
 
