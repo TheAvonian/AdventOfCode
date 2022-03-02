@@ -1,10 +1,10 @@
+use std::error::Error;
 use std::fs;
 use std::io::{BufReader, Read};
 use std::path::Path;
 
 
 fn main() {
-
     println!("\n\nPuzzle 1:\n");
 
     let path = Path::new("./src/input.txt");
@@ -54,4 +54,6 @@ fn main() {
     }
 
     println!("Output part 2 finished!\n\nOutput p2: {}\n\n", total_increasing);
+
+    println!("{}", -30 % 26);
 }
